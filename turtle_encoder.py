@@ -3,6 +3,42 @@ from PIL import Image
 import random
 import copy
 
+def main():
+    """Set the paramaters on the make_turtle_image function, w&h in inches to adjust the format for the image output."""
+    print(style.GREEN + "Turtle Encoder 1.0.0 🐢" + style.RESET)
+    message = input("Enter your message: ")
+    encoded_message = text_to_8bit(message)
+    make_turtle_image(encoded_message, width=20, height=16, columns=3, resolution=72)
+
+class style():
+    GREEN = '\033[92m'
+    RESET = '\033[0m'
+
+def text_to_charcode(message):
+    return [ord(char) for char in message]
+
+def ord_to_binary(ord_message):
+    return [bin(num) for num in ord_message]
+    
+def eightify(bin_string):
+    """Example: converts '0b1100001' to '01100001' ensuring each binary number is an 8 digit long string"""
+    num = bin_string.replace("0b", "").zfill(8)
+    return num
+
+def bin_to_8bit(bin_list):
+    return [eightify(bin_str) for bin_str in bin_list]
+
+def text_to_8bit(message, debug=True):
+    """Converts a text message to ordinal numbers to binary and returns the 8-bit binary List."""
+    ord_message = text_to_charcode(message)
+    binary_message = ord_to_binary(ord_message)
+    eight_bit = (bin_to_8bit(binary_message))
+    if debug: print(ord_message, binary_message, eight_bit, sep='\n')
+    return eight_bit
+    
+def get_images(folder_path):
+    return os.listdir(folder_path)
+
 def image_queue_maker(image_list, turtle_count):
     """Shuffle in place method, rather than randomly pulling from original list, to ensure that every image is used."""
     count = 0
@@ -62,36 +98,7 @@ def make_turtle_image(binary_message=['01101000', '01100101', '01101100', '01101
     file_path = os.path.join(output_folder, "turtle_image.jpg")
     art_canvas.save(file_path, dpi=(resolution, resolution), quality=100)
     print(f"Image saved to {file_path}")
-    
-def text_to_charcode(message):
-    return [ord(char) for char in message]
-
-def ord_to_binary(ord_message):
-    return [bin(num) for num in ord_message]
-    
-def eightify(bin_string):
-    """Example: converts '0b1100001' to '01100001' ensuring each binary number is an 8 digit long string"""
-    num = bin_string.replace("0b", "").zfill(8)
-    return num
-
-def bin_to_8bit(bin_list):
-    return [eightify(bin_str) for bin_str in bin_list]
-
-def text_to_8bit(message, debug=True):
-    ord_message = text_to_charcode(message)
-    binary_message = ord_to_binary(ord_message)
-    eight_bit = (bin_to_8bit(binary_message))
-    if debug: print(ord_message, binary_message, eight_bit, sep='\n')
-    return eight_bit
-    
-def get_images(folder_path):
-    return os.listdir(folder_path)
-    
-def main():
-    print("Turtle Encoder 1.0.0 🐢")
-    message = input("Enter your message: ")
-    encoded_message = text_to_8bit(message)
-    make_turtle_image(encoded_message, width=20, height=16, columns=1, resolution=72)
+    return file_path
     
 if __name__ == "__main__":
     main()
