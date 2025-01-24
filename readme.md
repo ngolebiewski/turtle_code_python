@@ -4,7 +4,7 @@
 
 - Python
 - Pillow
-- Flask?
+- Flask? --> for endpoint that a React FE can access?
 
 OK lets go.
 
