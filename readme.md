@@ -8,12 +8,16 @@
 - Each '0' is represented by a left-facing turtle
 - Each '1' is represemted by a right-facing turtle
 
-## How?
-
+## How to install and use.
+- Clone this repo.
+- Make Virtual Environment.
+    a. `python3 -m venv venv`
+    b. Activate: `source venv/bin/activate`
+- Install necessary libraries: `pip install -r requirements.txt`
 - Add left-facing turtle images into the `images` folder. 
-- Should all be SQUARE format.
+    - Should all be SQUARE format.
 - Adjust paramaters in the turtle_encoder code `make_turtle_image(encoded_message, width=20, height=16, columns=3, resolution=72)`
-- Note width and height are in inches
+    - Note width and height are in inches
 - Run `python3 turtle_encoder.py`
 
 ## Tech
