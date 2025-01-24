@@ -15,7 +15,7 @@ import random
 import copy
 
 def image_queue_maker(image_list, turtle_count):
-       # do this shuffle in place method, rather than entirely random sorting, to ensure that every image is used.
+    """Shuffle in place method, rather than randomly pulling from original list, to ensure that every image is used."""
     count = 0
     turtle_queue = list()
     while count < turtle_count:
@@ -23,36 +23,48 @@ def image_queue_maker(image_list, turtle_count):
         random.shuffle(shuffled_turtles)
         turtle_queue.extend(shuffled_turtles)
         count = len(turtle_queue)
-        # print('count', count)
         shuffled_turtles.clear()
-    # print("length turtle queue:", len(turtle_queue))
-    turtle_queue = turtle_queue[0:turtle_count]
-    # print("length SLICED turtle queue:", len(turtle_queue))
-    # print("count", turtle_count, "list", turtle_queue, sep="\n")
+    turtle_queue = turtle_queue[0:turtle_count] # Cuts queued list to the number of turtle characters within the message, as the while loop can overpopulate on the last iteration.
     return turtle_queue
     
 def make_turtle_image(binary_message=['01101000', '01100101', '01101100', '01101100', '01101111', '00100001'], 
                       width=10, height=8, columns=2, resolution=300):
+
     folder_path = "images/"
     contents = os.listdir(folder_path)
-
     output_folder = "out"
     os.makedirs(output_folder, exist_ok=True)
 
-    # # These params now args from function call
-    # width, height = 10,8
-    # columns = 1 # could be 1,2,3,4 more too tiny
-    # resolution = 300
-    
     art_canvas = Image.new(mode='RGB', size=[width*resolution, height*resolution], color='white')
     grid_columns = columns * 10 # height the same, as we're dealing with square ratio images.
     grid_width = int(width * resolution / grid_columns)
     x = 0
-    y = grid_width
+    y = 0
     turtle_count = len(binary_message)*8
     
-    turtle_queue = image_queue_maker(contents, turtle_count)
-    print(turtle_queue)
+    turtle_queue = image_queue_maker(contents, turtle_count) # List of image files, randomized for num chars within binary message
+    
+    for index, octet in enumerate(binary_message):
+        if index % columns == 0:  #logic check to see if need a new row line. inits 
+            y += grid_width
+            #reset x when beginning a new line, like a typewriter starting a new line
+            if columns == 2: 
+                x = int(grid_width * .25) 
+            elif columns == 3: 
+                x = int(grid_width * .5)
+            else: 
+                x = 0 
+        x += int(grid_width) # initial blank space
+    
+        # print 8 turtles
+        for num in octet:
+            img = Image.open(folder_path + turtle_queue.pop())
+            resized_img = img.resize((grid_width, grid_width), Image.LANCZOS) # Hi-fi resampling so jpg not jagged.
+            if num == '1': resized_img = resized_img.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
+            art_canvas.paste(resized_img, (x, y))
+            x += grid_width # shift typewriter over one space
+        # final blank space
+        x += int(grid_width * .5)
         
     
     #rows: Determine from length of binary message (i.e. list has 4 items, each of an 8 digit number)
@@ -61,12 +73,12 @@ def make_turtle_image(binary_message=['01101000', '01100101', '01101100', '01101
         
     # do math, something like the modulo function to see where you are. i.e. remainder 1 or 0 print (check) print a blank sq.
 
-    for pic in contents:
-        img = Image.open(folder_path + pic)
-        resized_img = img.resize((grid_width, grid_width), Image.LANCZOS) # Hi-fi resampling so jpg not jagged.
-        if x > 400: resized_img = resized_img.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
-        art_canvas.paste(resized_img, (x, y))
-        x += grid_width # make dynamic
+    # for pic in contents:
+    #     img = Image.open(folder_path + pic)
+    #     resized_img = img.resize((grid_width, grid_width), Image.LANCZOS) # Hi-fi resampling so jpg not jagged.
+    #     if x > 400: resized_img = resized_img.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
+    #     art_canvas.paste(resized_img, (x, y))
+    #     x += grid_width # make dynamic
         
     # would need a Y += int step for a new column
 
@@ -74,14 +86,6 @@ def make_turtle_image(binary_message=['01101000', '01100101', '01101100', '01101
     art_canvas.save(file_path, dpi=(resolution, resolution), quality=100)
 
     print(f"Image saved to {file_path}")
-
-
-def main():
-    print("Turtle Encoder 1.0.0 🐢")
-    message = input("Enter your message: ")
-    encoded_message = text_to_8bit(message)
-    make_turtle_image(encoded_message, width=20, height=16, columns=1, resolution=300)
-
     
 def text_to_charcode(message):
     return [ord(char) for char in message]
@@ -106,6 +110,12 @@ def text_to_8bit(message, debug=True):
     
 def get_images(folder_path):
     return os.listdir(folder_path)
+    
+def main():
+    print("Turtle Encoder 1.0.0 🐢")
+    message = input("Enter your message: ")
+    encoded_message = text_to_8bit(message)
+    make_turtle_image(encoded_message, width=20, height=16, columns=1, resolution=72)
     
 if __name__ == "__main__":
     main()
