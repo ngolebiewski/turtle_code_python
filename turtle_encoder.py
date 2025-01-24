@@ -1,14 +1,3 @@
-# import argparse
-
-# parser = argparse.ArgumentParser(
-#                     prog='Turtle Encoder 1.0.0 🐢',
-#                     description='Takes text, encodes as binary, represents 1s and 0 as turtles.',
-#                     epilog='Save the turtles, keep the environment clean')
-# parser.add_argument('phrase', type=ascii, nargs='?', default='hello world!', help='This is a phrase contained within quotes.')
-
-# args = parser.parse_args()
-# args.phrase = args.phrase[1:-1] # gets rid of quotes
-
 import os
 from PIL import Image
 import random
@@ -24,12 +13,12 @@ def image_queue_maker(image_list, turtle_count):
         turtle_queue.extend(shuffled_turtles)
         count = len(turtle_queue)
         shuffled_turtles.clear()
-    turtle_queue = turtle_queue[0:turtle_count] # Cuts queued list to the number of turtle characters within the message, as the while loop can overpopulate on the last iteration.
+    turtle_queue = turtle_queue[0:turtle_count] # Cuts list to actual length of message, while loop can add in some extra.
     return turtle_queue
     
 def make_turtle_image(binary_message=['01101000', '01100101', '01101100', '01101100', '01101111', '00100001'], 
                       width=10, height=8, columns=2, resolution=300):
-
+    """Turns the 8-bit binary message into a turtle image and exports the jpg file"""
     folder_path = "images/"
     contents = os.listdir(folder_path)
     output_folder = "out"
@@ -45,16 +34,18 @@ def make_turtle_image(binary_message=['01101000', '01100101', '01101100', '01101
     turtle_queue = image_queue_maker(contents, turtle_count) # List of image files, randomized for num chars within binary message
     
     for index, octet in enumerate(binary_message):
-        if index % columns == 0:  #logic check to see if need a new row line. inits 
+        # Check to see if we need a new line, and resets x.
+        if index % columns == 0: 
             y += grid_width
-            #reset x when beginning a new line, like a typewriter starting a new line
             if columns == 2: 
                 x = int(grid_width * .25) 
             elif columns == 3: 
                 x = int(grid_width * .5)
             else: 
                 x = 0 
-        x += int(grid_width) # initial blank space
+                
+        # initial blank space
+        x += int(grid_width) 
     
         # print 8 turtles
         for num in octet:
@@ -63,28 +54,13 @@ def make_turtle_image(binary_message=['01101000', '01100101', '01101100', '01101
             if num == '1': resized_img = resized_img.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
             art_canvas.paste(resized_img, (x, y))
             x += grid_width # shift typewriter over one space
+            
         # final blank space
         x += int(grid_width * .5)
         
-    
-    #rows: Determine from length of binary message (i.e. list has 4 items, each of an 8 digit number)
-        # factor in number columns -- or grid columns! -- 
-        # for a 2 column image, new row every 16 turtle images. modulus % 8*columns
-        
-    # do math, something like the modulo function to see where you are. i.e. remainder 1 or 0 print (check) print a blank sq.
-
-    # for pic in contents:
-    #     img = Image.open(folder_path + pic)
-    #     resized_img = img.resize((grid_width, grid_width), Image.LANCZOS) # Hi-fi resampling so jpg not jagged.
-    #     if x > 400: resized_img = resized_img.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
-    #     art_canvas.paste(resized_img, (x, y))
-    #     x += grid_width # make dynamic
-        
-    # would need a Y += int step for a new column
-
+    # Save the image file
     file_path = os.path.join(output_folder, "turtle_image.jpg")
     art_canvas.save(file_path, dpi=(resolution, resolution), quality=100)
-
     print(f"Image saved to {file_path}")
     
 def text_to_charcode(message):
