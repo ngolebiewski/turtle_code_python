@@ -15,6 +15,7 @@
 ## Todo
 - Flask? --> for endpoint that a React FE can access?
 - Code is a partner to this demo app: Partner to: https://turtle-encoder.onrender.com/
+- Adjust row size on image output to center for less text, or adjust columns/rows for longer text Dynamically.
 
 ## Notes:
 - Read up on resampling images: https://en.wikipedia.org/wiki/Lanczos_resampling
