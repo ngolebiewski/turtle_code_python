@@ -9,3 +9,7 @@
 OK lets go.
 
 Partner to: https://turtle-encoder.onrender.com/
+
+Notes:
+- Reading up on resampling images: https://en.wikipedia.org/wiki/Lanczos_resampling
+- 
