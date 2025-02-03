@@ -2,13 +2,25 @@ import os
 from PIL import Image
 import random
 import copy
+import argparse
 
 def main():
     """Set the paramaters on the make_turtle_image function, w&h in inches to adjust the format for the image output."""
+    args = get_args()
     print(style.GREEN + "Turtle Encoder 1.0.0 🐢" + style.RESET)
     message = input("Enter your message: ")
     encoded_message = text_to_8bit(message)
     make_turtle_image(encoded_message, width=20, height=16, columns=3, resolution=72)
+    
+def get_args():
+    parser = argparse.ArgumentParser(prog='Turtle Encoder 0.0.1 🐢',
+                    description='Takes text, encodes as binary, represents 1s and 0 as turtles.',
+                    epilog='Save the turtles, keep the environment clean')
+    parser.add_argument("-W", "--width", type=int, default=20, help="Width of the image in inches (default: 20)")
+    parser.add_argument("-H", "--height", type=int, default=16, help="Height of the image in inches (default: 16)")
+    parser.add_argument("-C", "--columns", type=int, default=3, help="Number of columns choose 1-3 for best results (default: 3)")
+    parser.add_argument("-R", "--resolution", type=int, default=300, help="Resolution of the image in DPI (default: 300)")
+    return parser.parse_args()
 
 class style():
     GREEN = '\033[92m'
