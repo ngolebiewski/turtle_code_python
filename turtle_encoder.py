@@ -10,7 +10,7 @@ def main():
     print(style.GREEN + "Turtle Encoder 1.0.0 🐢" + style.RESET)
     message = input("Enter your message: ")
     encoded_message = text_to_8bit(message)
-    make_turtle_image(encoded_message, width=20, height=16, columns=3, resolution=72)
+    make_turtle_image(encoded_message, width=args.width, height=args.height, columns=args.columns, resolution=args.resolution)
     
 def get_args():
     parser = argparse.ArgumentParser(prog='Turtle Encoder 0.0.1 🐢',
