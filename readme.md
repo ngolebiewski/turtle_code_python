@@ -16,9 +16,13 @@
 - Install necessary libraries: `pip install -r requirements.txt`
 - Add left-facing turtle images into the `images` folder. 
     - Should all be SQUARE format.
-- Adjust paramaters in the turtle_encoder code `make_turtle_image(encoded_message, width=20, height=16, columns=3, resolution=72)`
-    - Note width and height are in inches
 - Run `python3 turtle_encoder.py`
+- See below for CLI flags
+
+## SAMPLE USAGE with OPTIONAL CLI FLAGS
+- `python3 turtle_encoder.py -W 10 -H 8 -C 2 -R 300`
+- OR `python3 turtle_encoder.py --width 10 --height 8 --columns 2 --resolution 300`
+- Note: width and height in inches. Resolution is DPI (dots per inch)
 
 ## Tech
 
