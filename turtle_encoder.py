@@ -1,8 +1,9 @@
 import os
-from PIL import Image, ImageFont, ImageDraw
+from PIL import Image
 import random
 import copy
 import argparse
+import re
 
 def main():
     """Set the paramaters on the make_turtle_image function, w&h in inches to adjust the format for the image output."""
@@ -10,8 +11,7 @@ def main():
     print(style.GREEN + "Turtle Encoder 1.0.0 🐢" + style.RESET)
     message = input("Enter your message: ")
     encoded_message = text_to_8bit(message)
-    make_turtle_image(encoded_message, width=args.width, height=args.height, columns=args.columns, resolution=args.resolution)
-    # make_turtle_image_with_keys(encoded_message, message, width=args.width, height=args.height, columns=args.columns, resolution=args.resolution)
+    make_turtle_image(message, encoded_message, width=args.width, height=args.height, columns=args.columns, resolution=args.resolution)
     
 def get_args():
     parser = argparse.ArgumentParser(prog='Turtle Encoder 0.0.1 🐢',
@@ -65,7 +65,7 @@ def image_queue_maker(image_list, turtle_count):
     turtle_queue = turtle_queue[0:turtle_count] # Cuts list to actual length of message, while loop can add in some extra.
     return turtle_queue
     
-def make_turtle_image(binary_message=['01101000', '01100101', '01101100', '01101100', '01101111', '00100001'], 
+def make_turtle_image(message="hello", binary_message=['01101000', '01100101', '01101100', '01101100', '01101111', '00100001'], 
                       width=10, height=8, columns=2, resolution=300):
     """Turns the 8-bit binary message into a turtle image and exports the jpg file"""
     folder_path = "images/"
@@ -108,74 +108,9 @@ def make_turtle_image(binary_message=['01101000', '01100101', '01101100', '01101
         x += int(grid_width * .5)
         
     # Save the image file
-    file_path = os.path.join(output_folder, "turtle_image.jpg")
-    art_canvas.save(file_path, dpi=(resolution, resolution), quality=100)
-    print(f"Image saved to {file_path}")
-    return file_path
-
-def make_turtle_image_with_keys(binary_message, message, width=10, height=8, columns=2, resolution=300):
-    """Turns the 8-bit binary message into a turtle image with keys (0 and 1 printed below each turtle) and exports the jpg file."""
-    folder_path = "images/"
-    contents = os.listdir(folder_path)
-    output_folder = "out"
-    os.makedirs(output_folder, exist_ok=True)
-
-    art_canvas = Image.new(mode='RGB', size=[width * resolution, height * resolution], color='white')
-    grid_columns = columns * 10  # height the same, as we're dealing with square ratio images.
-    grid_width = int(width * resolution / grid_columns)
-    x = 0
-    y = 0
-    turtle_count = len(binary_message) * 8
-
-    turtle_queue = image_queue_maker(contents, turtle_count)  # List of image files, randomized for num chars within binary message
-
-    ordinal = 1
-    letter_index = 0
-
-    for index, octet in enumerate(binary_message):
-        # Get the letter that the binary represents
-        char = message[letter_index]
-        ordinal_text = f"{ordinal}."
-
-        # Check to see if we need a new line, and reset x.
-        if index % columns == 0:
-            y += grid_width
-            ordinal += 1
-            if columns == 2:
-                x = int(grid_width * .25)
-            elif columns == 3:
-                x = int(grid_width * .5)
-            else:
-                x = 0
-
-        # Add the letter and ordinal number to the canvas
-        font = ImageFont.load_default()
-        draw = ImageDraw.Draw(art_canvas)
-        draw.text((x, y), f"{char} {ordinal_text}", font=font, fill="black")
-
-        # initial blank space
-        x += int(grid_width)
-
-        # Print 8 turtles and 0 or 1 below each one
-        for num in octet:
-            img = Image.open(folder_path + turtle_queue.pop())
-            resized_img = img.resize((grid_width, grid_width), Image.LANCZOS)  # Hi-fi resampling so jpg not jagged.
-            if num == '1': resized_img = resized_img.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
-
-            art_canvas.paste(resized_img, (x, y + grid_width))  # Place the turtle
-
-            # Write the binary digit below the turtle
-            draw.text((x + grid_width / 4, y + grid_width + 10), num, font=font, fill="black")
-
-            x += grid_width  # Shift to the next turtle space
-
-        # Final blank space
-        x += int(grid_width * .5)
-        
-        letter_index += 1  # Move to the next character
-
-    # Save the image file
-    file_path = os.path.join(output_folder, "turtle_with_key.jpg")
+    message = re.sub(r'[^\w\s]', '', message) 
+    message = message.replace(" ", "_")
+    file_path = os.path.join(output_folder, f"{message}.jpg")
     art_canvas.save(file_path, dpi=(resolution, resolution), quality=100)
     print(f"Image saved to {file_path}")
     return file_path
