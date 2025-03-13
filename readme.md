@@ -19,6 +19,7 @@
     - Should all be SQUARE format.
 - Run `python3 turtle_encoder.py`
 - See below for CLI flags
+- Pulls images from the /images folder. So you can drop any left-facing images of whatever creature or object or abstract notion represented in pixels in there. Right now it has the turtles that the students painted in class.
 
 ## SAMPLE USAGE with OPTIONAL CLI FLAGS
 - `python3 turtle_encoder.py -W 10 -H 8 -C 2 -R 300`
@@ -35,6 +36,16 @@
 Message: "The Analytical Engine weaves algebraic patterns, just as the Jacquard loom weaves flowers and leaves" -Ada Lovelace
 
 ![lots of turtles in 3 columns](out/ada_quote.jpg)
+
+## Design.
+
+The way that I devided to use the images is intentionally designed to iterate through the entire folder of images (i.e. 20 paintings) so that they each is included once, in a random order, before repeating the images in the folder. This is to ensure that there’s an equal distribution of images in the output image. I wouldn’t want one image to be selected 30 times, and another not to show up at all, which is a possibility if it were a completely random algorithm calling on the images in the folder. 
+
+Also, all the turtles were scanned in Photoshop, and flipped horizontally if necessary, to all be left facing as a starting point.
+
+The algorithm flips to the image from left to the right in the case that the image is used to represent a “1”. That way you’ll see the same turtle facing left and right in various places throughout the image. 
+
+The program sorts the turtles into columns, read left to right, top to bottom. I intended this to bring a strong visual dynamic, ordered, to really show the similarities and differences between each image. 
 
 ## Utils
 - file renamer to scrub names and metadata from images
