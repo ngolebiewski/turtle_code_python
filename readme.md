@@ -1,6 +1,7 @@
 # Turtle Code 🐢
 
 ## CLI Program: Encode text in binary, represent by n number of turtle images, export hi-res image for print.
+- See the conecpt in interactive action on the webs: https://turtle-encoder.onrender.com/
 
 ## What?
 
@@ -35,11 +36,10 @@ Message: "The Analytical Engine weaves algebraic patterns, just as the Jacquard 
 
 ![lots of turtles in 3 columns](out/ada_quote.jpg)
 
-## Todo
+## Future ideas/TODO
 
 - Add message in plain text on lower right (?) of output image.
 - Flask? --> for endpoint that a React FE can access?
-- Code is a partner to this demo app: Partner to: https://turtle-encoder.onrender.com/
 - Adjust row size on image output to center for less text, or adjust columns/rows for longer text Dynamically.
 
 ## Notes:
