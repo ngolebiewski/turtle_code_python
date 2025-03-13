@@ -38,9 +38,10 @@ Message: "The Analytical Engine weaves algebraic patterns, just as the Jacquard 
 
 ## Utils
 - file renamer to scrub names and metadata from images
-- images to animated gif util
-![animated_turtles](util/GIF_OUT/animated.gif)
 - take images and put 4 on a page -- for source images in class
+- images to animated gif util
+
+![animated_turtles](util/GIF_OUT/animated.gif)
 
 ## Future ideas/TODO
 
