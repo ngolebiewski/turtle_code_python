@@ -36,6 +36,12 @@ Message: "The Analytical Engine weaves algebraic patterns, just as the Jacquard 
 
 ![lots of turtles in 3 columns](out/ada_quote.jpg)
 
+## Utils
+- file renamer to scrub names and metadata from images
+- images to animated gif util
+![animated_turtles](util/GIF_OUT/animated.gif)
+- take images and put 4 on a page -- for source images in class
+
 ## Future ideas/TODO
 
 - Add message in plain text on lower right (?) of output image.
