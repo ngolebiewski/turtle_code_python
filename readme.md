@@ -2,6 +2,7 @@
 
 ## CLI Program: Encode text in binary, represent by n number of turtle images, export hi-res image for print.
 - See the conecpt in interactive action on the webs: https://turtle-encoder.onrender.com/
+- I wrote about this project on Medium, read here: https://medium.com/@x_48243/turtle-power-or-an-introduction-to-creating-secret-messages-through-art-and-code-2e6803af0ad2
 
 ## What?
 
